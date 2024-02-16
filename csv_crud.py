@@ -45,12 +45,34 @@ def load_csv_file(csv_file_pointer):
     pp(data[1:6])
     return True, data
 
+def display_records():
+    print("Display Records")
+
+def delete_records():
+    print("Delete Records")
+
+def update_records():
+    print("Update Records")
+
 def display_and_parse_console():
-    print("No options available yet")
-    user_cmd = input("Press a key to continue (0 to quit): ")
-    if user_cmd == "0":
+    user_cmds = ['exit', 'display', 'remove', 'update']
+    print('File Operations')
+    print('[1] Display Contents (All)')
+    print('[2] Remove a record')
+    print('[3] Update a row')
+    print('[0] Exit')
+    user_cmd = input("Your Selection: ")
+
+    if user_cmd == '0':
         return END
-    
+    elif user_cmd == '1':
+        display_records()
+    elif user_cmd == '2':
+        delete_records()
+    elif user_cmd == '3':
+        update_records()
+    else:
+        print(f"%%ERROR%%: Invalid entry {user_cmd}. Accepted range 0-3")
     return True
 
 if __name__ == '__main__':
