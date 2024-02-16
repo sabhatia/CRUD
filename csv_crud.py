@@ -1,7 +1,8 @@
 # Sample file to do CRUD operations on CSV files
 
-import sys
 import argparse
+import csv
+from pprint import pprint as pp
 
 def build_parser():
 
@@ -11,7 +12,7 @@ def build_parser():
     return parser
 
 
-def load_file(file_path_name):
+def open_csv_file(file_path_name):
     """
     Function to open a file
 
@@ -27,10 +28,20 @@ def load_file(file_path_name):
     print(f"STATUS: Loading file {file_path_name}")
     mode = 'rw'
     try:
-        with open(file_path_name) as file_pointer:
-            return True, file_pointer
+        file_pointer = open(file_path_name) 
+        return True, file_pointer
     except FileNotFoundError:
         return False, file_pointer
+
+def load_csv_file(csv_file_pointer):
+    data = []
+    lines = csv_file_pointer.readlines()
+    for line in lines:
+        row = line.strip().split(',')
+        data.append(row)
+
+    pp(data[1:6])
+    return True, data
 
 def display_and_parse_console():
     print("No options available yet")
@@ -53,13 +64,20 @@ if __name__ == '__main__':
     csv_file = args.filename
     
     # 3. Ensure file is useable
-    file_load_status, file_pointer = load_file(csv_file)
+    file_load_status, file_pointer = open_csv_file(csv_file)
     if file_load_status == False:
         print("%%ERROR%%: Unable to find/load file:", csv_file)
         exit()
 
-    # 2. Diplay the console for further instructions
+    # 4. Read to memory
+    file_page_status, csv_table = load_csv_file(file_pointer)
+    if file_page_status == False:
+        print("%%ERROR%%: Couldn't load file into memory")
+        exit()
+
+    # 4. Diplay the console for further instructions
     while (display_and_parse_console() != END):
         continue
 
+    # Done, close the file
     file_pointer.close()
