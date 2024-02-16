@@ -36,10 +36,12 @@ def open_csv_file(file_path_name):
 def load_csv_file(csv_file_pointer):
     data = []
     lines = csv_file_pointer.readlines()
+    header_row = lines[0].strip().split(',')
     for line in lines:
         row = line.strip().split(',')
         data.append(row)
 
+    pp(header_row)
     pp(data[1:6])
     return True, data
 
