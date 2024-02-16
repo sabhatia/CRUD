@@ -45,35 +45,41 @@ def load_csv_file(csv_file_pointer):
     pp(data[1:6])
     return True, data
 
+def end_display():
+    print("%%STATUS%%: Exit")
+    return END
+
 def display_records():
-    print("Display Records")
+    print("%%STATUS%%: Display Records")
+    return True
 
 def delete_records():
-    print("Delete Records")
+    print("%%STATUS%%: Delete Records")
+    return True
 
 def update_records():
-    print("Update Records")
+    print("%%STATUS%%: Update Records")
+    return True
 
 def display_and_parse_console():
     user_cmds = ['exit', 'display', 'remove', 'update']
+    ret_val = True
+    user_cmds_dict = {'0': end_display,
+                      '1': display_records,
+                      '2': delete_records,
+                      '3': update_records}
     print('File Operations')
-    print('[1] Display Contents (All)')
-    print('[2] Remove a record')
-    print('[3] Update a row')
+    print('[1] Display records')
+    print('[2] Remove records')
+    print('[3] Update records')
     print('[0] Exit')
     user_cmd = input("Your Selection: ")
 
-    if user_cmd == '0':
-        return END
-    elif user_cmd == '1':
-        display_records()
-    elif user_cmd == '2':
-        delete_records()
-    elif user_cmd == '3':
-        update_records()
+    if user_cmd in user_cmds_dict.keys():
+        ret_val = user_cmds_dict[user_cmd]()
     else:
         print(f"%%ERROR%%: Invalid entry {user_cmd}. Accepted range 0-3")
-    return True
+    return ret_val
 
 if __name__ == '__main__':
 
