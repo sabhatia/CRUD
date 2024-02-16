@@ -24,7 +24,7 @@ def load_file(file_path_name):
     
     """
     file_pointer = -1
-    print(f"STATUS: Loading file {file_path}")
+    print(f"STATUS: Loading file {file_path_name}")
     mode = 'rw'
     try:
         with open(file_path_name) as file_pointer:
@@ -53,7 +53,8 @@ if __name__ == '__main__':
     csv_file = args.filename
     
     # 3. Ensure file is useable
-    if load_file(csv_file) == False:
+    file_load_status, file_pointer = load_file(csv_file)
+    if file_load_status == False:
         print("%%ERROR%%: Unable to find/load file:", csv_file)
         exit()
 
