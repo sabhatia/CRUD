@@ -10,9 +10,27 @@ def build_parser():
     parser.add_argument('filename', help="filename to load")
     return parser
 
-def load_file(file_path):
+
+def load_file(file_path_name):
+    """
+    Function to open a file
+
+    Input
+        Arg: the name of the file to use
+
+    Output
+        Status: If the operation succeeded or failed
+        file_pointer: pointer to the opened file
+    
+    """
+    file_pointer = -1
     print(f"STATUS: Loading file {file_path}")
-    return True
+    mode = 'rw'
+    try:
+        with open(file_path_name) as file_pointer:
+            return True, file_pointer
+    except FileNotFoundError:
+        return False, file_pointer
 
 def display_and_parse_console():
     print("No options available yet")
@@ -42,3 +60,5 @@ if __name__ == '__main__':
     # 2. Diplay the console for further instructions
     while (display_and_parse_console() != END):
         continue
+
+    file_pointer.close()
