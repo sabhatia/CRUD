@@ -7,10 +7,27 @@ from pprint import pprint as pp
 def build_parser():
 
     # Just get the filename for now
-    parser = argparse.ArgumentParser(description="A program to do CRUD Ops on CSV files", formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description="A program to do CRUD Ops on CSV files", 
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('filename', help="filename to load")
     return parser
 
+class csv_database:
+    def __init__(self, header, data):
+        self.header = header
+        self.data = data
+
+    def display_db(self, first_row = 0, last_row = 5):
+        pp(self.header)
+        
+        # TODO: Add index checking
+        start_row = first_row
+        stop_row = last_row
+        for row in range(start_row, stop_row):
+            print(f"Record {row+1}: {self.data[row]}")
+    
+    def total_records_db(self):
+        return len(self.data)
 
 def open_csv_file(file_path_name):
     """
@@ -37,32 +54,40 @@ def load_csv_file(csv_file_pointer):
     data = []
     lines = csv_file_pointer.readlines()
     header_row = lines[0].strip().split(',')
-    for line in lines:
+    for line in lines[1:]:
         row = line.strip().split(',')
         data.append(row)
 
     pp(header_row)
     pp(data[1:6])
-    return True, data
+    return True, csv_database(header_row, data)
 
-def end_display():
+def end_display(memory_db):
     print("%%STATUS%%: Exit")
     return END
 
-def display_records():
+def display_records(memory_db):
+    record_count = memory_db.total_records_db()
     print("%%STATUS%%: Display Records")
+    print("Total Records: ", record_count)
+    first_record = int(input("Enter starting range: [0 for all]:"))
+    last_record = int(input("Enter last record: "))
+
+    memory_db.display_db(first_record, last_record)
+    if (first_record > record_count or last_record > record_count):
+        print(f"%%ERROR%%: Records should be between 1 - {record_count}")
+
     return True
 
-def delete_records():
+def delete_records(memory_db):
     print("%%STATUS%%: Delete Records")
     return True
 
-def update_records():
+def update_records(memory_db):
     print("%%STATUS%%: Update Records")
     return True
 
-def display_and_parse_console():
-    user_cmds = ['exit', 'display', 'remove', 'update']
+def display_and_parse_console(memory_db):
     ret_val = True
     user_cmds_dict = {'0': end_display,
                       '1': display_records,
@@ -70,13 +95,13 @@ def display_and_parse_console():
                       '3': update_records}
     print('File Operations')
     print('[1] Display records')
-    print('[2] Remove records')
+    print('[2] Delete records')
     print('[3] Update records')
     print('[0] Exit')
     user_cmd = input("Your Selection: ")
 
     if user_cmd in user_cmds_dict.keys():
-        ret_val = user_cmds_dict[user_cmd]()
+        ret_val = user_cmds_dict[user_cmd](memory_db)
     else:
         print(f"%%ERROR%%: Invalid entry {user_cmd}. Accepted range 0-3")
     return ret_val
@@ -106,7 +131,7 @@ if __name__ == '__main__':
         exit()
 
     # 4. Diplay the console for further instructions
-    while (display_and_parse_console() != END):
+    while (display_and_parse_console(csv_table) != END):
         continue
 
     # Done, close the file
