@@ -3,6 +3,7 @@
 import argparse
 import csv
 from pprint import pprint as pp
+from memory_db import memory_db
 
 def build_parser():
 
@@ -11,23 +12,6 @@ def build_parser():
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('filename', help="filename to load")
     return parser
-
-class csv_database:
-    def __init__(self, header, data):
-        self.header = header
-        self.data = data
-
-    def display_db(self, first_row = 0, last_row = 5):
-        pp(self.header)
-        
-        # TODO: Add index checking
-        start_row = first_row
-        stop_row = last_row
-        for row in range(start_row, stop_row):
-            print(f"Record {row+1}: {self.data[row]}")
-    
-    def total_records_db(self):
-        return len(self.data)
 
 def open_csv_file(file_path_name):
     """
@@ -60,34 +44,34 @@ def load_csv_file(csv_file_pointer):
 
     pp(header_row)
     pp(data[1:6])
-    return True, csv_database(header_row, data)
+    return True, memory_db(header_row, data)
 
-def end_display(memory_db):
+def end_display(mem_db):
     print("%%STATUS%%: Exit")
     return END
 
-def display_records(memory_db):
-    record_count = memory_db.total_records_db()
+def display_records(mem_db):
+    record_count = mem_db.total_records_db()
     print("%%STATUS%%: Display Records")
     print("Total Records: ", record_count)
     first_record = int(input("Enter starting range: [0 for all]:"))
     last_record = int(input("Enter last record: "))
 
-    memory_db.display_db(first_record, last_record)
+    mem_db.display_db(first_record, last_record)
     if (first_record > record_count or last_record > record_count):
         print(f"%%ERROR%%: Records should be between 1 - {record_count}")
 
     return True
 
-def delete_records(memory_db):
+def delete_records(mem_db):
     print("%%STATUS%%: Delete Records")
     return True
 
-def update_records(memory_db):
+def update_records(mem_db):
     print("%%STATUS%%: Update Records")
     return True
 
-def display_and_parse_console(memory_db):
+def display_and_parse_console(mem_db):
     ret_val = True
     user_cmds_dict = {'0': end_display,
                       '1': display_records,
@@ -101,7 +85,7 @@ def display_and_parse_console(memory_db):
     user_cmd = input("Your Selection: ")
 
     if user_cmd in user_cmds_dict.keys():
-        ret_val = user_cmds_dict[user_cmd](memory_db)
+        ret_val = user_cmds_dict[user_cmd](mem_db)
     else:
         print(f"%%ERROR%%: Invalid entry {user_cmd}. Accepted range 0-3")
     return ret_val
