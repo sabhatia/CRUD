@@ -18,10 +18,7 @@ class memory_db:
         
         self.header, self.data = memory_db.load_csv_file(self.csv_file_pointer)
 
-
     def __del__(self):
-        if self.csv_file_pointer == -1:
-            return
         self.csv_file_pointer.close()
 
     @staticmethod
@@ -50,10 +47,6 @@ class memory_db:
         for line in lines[1:]:
             row = line.strip().split(',')
             data.append(row)
-
-        pp(header_row)
-        pp(data[1:6])
-        
         return header_row, data
 
     def display_db(self, first_row = 0, last_row = 5):
