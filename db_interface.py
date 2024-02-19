@@ -34,9 +34,9 @@ def display_records(mem_db):
         return False
     
     # Get and validate final value
-    last_record = int(input(f"Enter last record: [{first_record} - {record_count}]: "))
-    if last_record < first_record or last_record > record_count:
-        print(f"[ERROR]: You entered {last_record} for end value. Expected [{first_record} - {record_count}].")
+    last_record = int(input(f"Enter last record: [{first_record + 1} - {record_count + 1}]: "))
+    if last_record < first_record + 1 or last_record > record_count + 1:
+        print(f"[ERROR]: You entered {last_record} for end value. Expected [{first_record + 1} - {record_count + 1}].")
         return False
     
     mem_db.display_recs(first_record, last_record)

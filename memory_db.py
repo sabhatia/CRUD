@@ -52,13 +52,20 @@ class memory_db:
     def display_recs(self, first_row = 1, last_row = 5):
         total_recs = self.total_records_db()
 
-        assert(first_row > 0 and first_row < total_recs)
-        assert(last_row > first_row and last_row <= total_recs)
+        # First verify the indices
+        # Lists use 0-based indexing
+        # DB uses 1-based indexing
+        # Rules
+        # 0 based index: [0:len-1] - [1:len]
+        # 1 based index: [1: len] - [2:len+1]
+
+        assert(first_row > 0 and first_row <= total_recs)
+        assert(last_row > first_row and last_row <= total_recs + 1)
         print(self.header)
         
         # TODO: Add index checking
         start_row = first_row - 1
-        stop_row = last_row #since half open intervals in range
+        stop_row = last_row - 1
         for row in range(start_row, stop_row):
             print(f"Record {row+1}: {self.data[row]}")
     
