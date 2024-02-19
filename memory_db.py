@@ -4,6 +4,7 @@ These operations are done on an in memory DB.
 It also supports load and flush operations to a file on disk. 
 '''
 from pprint import pprint as pp
+import csv
 
 class memory_db:
     def __init__(self, csv_filename: str):
@@ -20,6 +21,10 @@ class memory_db:
 
     def __del__(self):
         self.csv_file_pointer.close()
+        # Dump contents to file
+        with open(self.csv_filename, 'w', newline="") as new_csv_fp:
+            writer = csv.writer(new_csv_fp)
+            writer.writerows(self.data)
 
     @staticmethod
     def open_csv_file(file_path_name: str):
