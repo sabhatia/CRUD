@@ -5,6 +5,7 @@ It also supports load and flush operations to a file on disk.
 '''
 from pprint import pprint as pp
 import csv
+import shutil
 
 class memory_db:
     def __init__(self, csv_filename: str):
@@ -21,6 +22,11 @@ class memory_db:
 
     def __del__(self):
         self.csv_file_pointer.close()
+
+        # Create a backup - just in case
+        file_extention = ".bak"
+        shutil.copy2(self.csv_filename, self.csv_filename + file_extention)
+
         # Dump contents to file
         with open(self.csv_filename, 'w', newline="") as new_csv_fp:
             writer = csv.writer(new_csv_fp)
