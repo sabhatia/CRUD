@@ -17,7 +17,7 @@ def build_parser():
 
 def display_all_records(mem_db):
     first_record = 1
-    last_record = mem_db.total_records_db()
+    last_record = mem_db.total_records_db() + 1
     
     print(f"[STATUS]: Display All Records")
     mem_db.display_recs(first_record, last_record)
