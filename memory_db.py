@@ -30,6 +30,7 @@ class memory_db:
         # Dump contents to file
         with open(self.csv_filename, 'w', newline="") as new_csv_fp:
             writer = csv.writer(new_csv_fp)
+            writer.writerow(self.header)
             writer.writerows(self.data)
 
     @staticmethod
