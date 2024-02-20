@@ -2,6 +2,7 @@
 
 import argparse
 import csv
+from inquirer import confirm
 from pprint import pprint as pp
 from memory_db import memory_db
 from memory_db import DB_Initialization_Error
@@ -66,6 +67,49 @@ def delete_records(mem_db):
 
 def update_records(mem_db):
     print("[STATUS]: : Update Records")
+
+    record_count = mem_db.total_records_db()
+
+    # Get and validate value
+    upd_record = int(input(f"Enter record to update [1 - {record_count}]: "))
+    if upd_record < 1 or upd_record > record_count:
+        print(f"[ERROR]: You entered {upd_record}. Expected [1 - {record_count}].")
+        return False
+
+    # Lets print some context
+    first_row = max(1, upd_record - 2)
+    last_row = min(mem_db.total_records_db(), upd_record + 2)
+    mem_db.display_recs(first_row, last_row)
+
+    # Get user input for updates
+    user_edu = input(f"Education Level [Bachelors|Masters|PHD]: ").strip()
+    user_year = int(input(f"Joining Year [2010 - 2020]: "))
+    user_city = input(f"City [Bangalore|Pune|New Delhi]: ").strip()
+    user_pay = input(f"Payment Tier [1-3]: ").strip()
+    user_age = int(input(f"Age [20 - 99]: "))
+    user_gender = input(f"Gender [Male|Female]: ").strip()
+    user_benched = input(f"Benched [Yes|No]: ").strip()
+    user_experience = int(input(f"Experience [1-9]: "))
+    user_leave = int(input(f"On Leave [1|0]: "))
+                  
+    # Get confirmation
+    user_record = [user_edu, 
+                   user_year,
+                   user_city,
+                   user_pay,
+                   user_age,
+                   user_gender,
+                   user_benched,
+                   user_experience,
+                   user_leave]
+    print(f"Changing record FROM: \n")
+    mem_db.display_recs(upd_record, upd_record+1)
+    print(f"TO: \n{user_record}\n")
+    answer = confirm("Proceed? (Y/N): ")
+    if answer:
+        mem_db.delete_recs(upd_record)
+        mem_db.add_recs(user_record)
+
     return True
 
 def end_display(mem_db):

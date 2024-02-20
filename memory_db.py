@@ -88,6 +88,9 @@ class memory_db:
         
         del self.data[del_row - 1]
         return True
+    
+    def add_recs(self, new_record):
+        self.data.append(new_record)
 
     def total_records_db(self):
         return len(self.data)
