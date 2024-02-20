@@ -75,7 +75,7 @@ class memory_db:
         assert(last_row > first_row and last_row <= total_recs + 1)
         print(self.header)
         
-        # TODO: Add index checking
+        # Asserts ensure first_row and last_row are within range
         start_row = first_row - 1
         stop_row = last_row - 1
         for row in range(start_row, stop_row):
