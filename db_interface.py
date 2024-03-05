@@ -96,10 +96,7 @@ def update_records(mem_db):
     in_record.append(input(f"Experience [1-9] (blank for {new_record[7]}): ").strip())
     in_record.append(input(f"On Leave [1|0] (blank for {new_record[8]}): ").strip())
 
-    print("UPD-Record:", upd_record)
-    print("IN-Record: ", in_record)
     new_record = [x if x else y for x,y in zip(in_record, upd_record)]
-    print("NEW-Record: ", new_record)
 
     # Get confirmation
     print(f"Changing record FROM: \n")
