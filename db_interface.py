@@ -107,6 +107,7 @@ def update_records(mem_db):
     print(f"TO: \n{new_record}\n")
     answer = confirm("Proceed? (Y/N): ")
     if answer:
+        print("Updating Record...")
         mem_db.delete_recs(upd_row)
         mem_db.add_recs(new_record)
 
