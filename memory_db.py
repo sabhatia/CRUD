@@ -92,6 +92,10 @@ class memory_db:
     def add_recs(self, new_record):
         self.data.append(new_record)
 
+    def get_rec(self, record_indx):
+        assert(record_indx > 0 and record_indx <= self.total_records_db())
+        return self.data[record_indx]
+
     def total_records_db(self):
         return len(self.data)
     

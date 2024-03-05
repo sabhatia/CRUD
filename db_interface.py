@@ -1,7 +1,7 @@
 # Sample file to do CRUD operations on CSV files
 
 import argparse
-import csv
+from copy import deepcopy
 from inquirer import confirm
 from pprint import pprint as pp
 from memory_db import memory_db
@@ -71,44 +71,44 @@ def update_records(mem_db):
     record_count = mem_db.total_records_db()
 
     # Get and validate value
-    upd_record = int(input(f"Enter record to update [1 - {record_count}]: "))
-    if upd_record < 1 or upd_record > record_count:
-        print(f"[ERROR]: You entered {upd_record}. Expected [1 - {record_count}].")
+    upd_row = int(input(f"Enter record to update [1 - {record_count}]: "))
+    if upd_row < 1 or upd_row > record_count:
+        print(f"[ERROR]: You entered {upd_row}. Expected [1 - {record_count}].")
         return False
 
     # Lets print some context
-    first_row = max(1, upd_record - 2)
-    last_row = min(mem_db.total_records_db(), upd_record + 2)
+    first_row = max(1, upd_row - 2)
+    last_row = min(mem_db.total_records_db(), upd_row + 2)
     mem_db.display_recs(first_row, last_row)
+    upd_record = mem_db.get_rec(upd_row - 1)
 
     # Get user input for updates
-    user_edu = input(f"Education Level [Bachelors|Masters|PHD]: ").strip()
-    user_year = int(input(f"Joining Year [2010 - 2020]: "))
-    user_city = input(f"City [Bangalore|Pune|New Delhi]: ").strip()
-    user_pay = input(f"Payment Tier [1-3]: ").strip()
-    user_age = int(input(f"Age [20 - 99]: "))
-    user_gender = input(f"Gender [Male|Female]: ").strip()
-    user_benched = input(f"Benched [Yes|No]: ").strip()
-    user_experience = int(input(f"Experience [1-9]: "))
-    user_leave = int(input(f"On Leave [1|0]: "))
-                  
+    new_record = deepcopy(upd_record)
+    in_record = list()
+
+    in_record.append(input(f"Education Level [Bachelors|Masters|PHD] (blank for {new_record[0]}): ").strip()) # [0]
+    in_record.append(input(f"Joining Year [2010 - 2020] (blank for {new_record[1]}): ").strip())
+    in_record.append(input(f"City [Bangalore|Pune|New Delhi] (blank for {new_record[2]}): ").strip())
+    in_record.append(input(f"Payment Tier [1-3] (blank for {new_record[3]}): ").strip())
+    in_record.append(input(f"Age [20 - 99] (blank for {new_record[4]}): ").strip())
+    in_record.append(input(f"Gender [Male|Female] (blank for {new_record[5]}): ").strip())
+    in_record.append(input(f"Benched [Yes|No] (blank for {new_record[6]}): ").strip())
+    in_record.append(input(f"Experience [1-9] (blank for {new_record[7]}): ").strip())
+    in_record.append(input(f"On Leave [1|0] (blank for {new_record[8]}): ").strip())
+
+    print("UPD-Record:", upd_record)
+    print("IN-Record: ", in_record)
+    new_record = [x if x else y for x,y in zip(in_record, upd_record)]
+    print("NEW-Record: ", new_record)
+
     # Get confirmation
-    user_record = [user_edu, 
-                   user_year,
-                   user_city,
-                   user_pay,
-                   user_age,
-                   user_gender,
-                   user_benched,
-                   user_experience,
-                   user_leave]
     print(f"Changing record FROM: \n")
-    mem_db.display_recs(upd_record, upd_record+1)
-    print(f"TO: \n{user_record}\n")
+    mem_db.display_recs(upd_row, upd_row+1)
+    print(f"TO: \n{new_record}\n")
     answer = confirm("Proceed? (Y/N): ")
     if answer:
-        mem_db.delete_recs(upd_record)
-        mem_db.add_recs(user_record)
+        mem_db.delete_recs(upd_row)
+        mem_db.add_recs(new_record)
 
     return True
 
