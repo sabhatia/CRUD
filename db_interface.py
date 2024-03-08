@@ -99,7 +99,7 @@ def update_records(mem_db):
     new_record = [x if x else y for x,y in zip(in_record, upd_record)]
 
     # Get confirmation
-    print(f"Changing record FROM: \n")
+    print(f"Changing record From: \n")
     mem_db.display_recs(upd_row, upd_row+1)
     print(f"TO: \n{new_record}\n")
     answer = confirm("Proceed? (Y/N): ")
